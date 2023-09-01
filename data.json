@@ -1,0 +1,68 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Phones",
+      "description": "All phones brand"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "notebooks",
+      "description": "portable PC"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "PC",
+      "description": "Personal_Computer"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "name": "TV",
+      "description": "telecommunication technology for broadcasting and receiving video and audio over a distance"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 5,
+    "fields": {
+      "name": "Headphones",
+      "description": "it needs to listen misic quite"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Iphone",
+      "description": "A bit apple",
+      "products_image": "",
+      "category": 1,
+      "price": 1500000.0,
+      "created_at": "2023-09-01T19:39:39Z",
+      "last_update": null
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "MacBook",
+      "description": "Portable PC created by Apple",
+      "products_image": "",
+      "category": 2,
+      "price": 180000.0,
+      "created_at": "2023-09-01T20:04:48Z",
+      "last_update": "2023-09-01T20:04:52Z"
+    }
+  }
+]
