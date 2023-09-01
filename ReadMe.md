@@ -1,7 +1,7 @@
 # Online_shop
 Этот проект написанный на Python 3.11^ с использованием фреймворка Django. Для отображения web приложения используется BootStrap 5^
 
-# Confirmed Tasks
+## Confirmed Tasks
 - Создан новый Django-проект
 - Создано первое приложение с названием catalog
 - Подготовлено 2 шаблона home_page, contacts
