@@ -11,7 +11,7 @@ class Command(BaseCommand):
             {'name': 'notebooks', 'description': 'portable PC'},
             {'name': 'PCs', 'description': 'Personal Computer'},
             {'name': 'TVs', 'description': 'telecommunication technology for broadcasting and receiving video '
-                                          'and audio over a distance'},
+                                           'and audio over a distance'},
             {'name': 'Headphones', 'description': 'it needs to listen misic quite'}
         ]
 
