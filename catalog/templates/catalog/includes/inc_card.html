@@ -13,7 +13,7 @@
                             <li>Описание товара: {{ product.description|slice:":100" }}</li>
                             <li>Категория товара: {{ product.category.name }}</li>
                         </ul>
-                        <a class="p-2 btn btn-outline-primary" href="{{ product.pk }}/catalog/products/">Перейти</a>
+                        <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:product' product.pk %}">Перейти</a>
                     </div>
                 </div>
             </div>
