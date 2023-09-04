@@ -23,7 +23,7 @@
                         <ul class="list-unstyled mt-3 mb-4 text-center m-3">
                             <li>{{ object.description }}</li>
                         </ul>
-                       <a class="p-2 btn btn-outline-primary" href="{{ product.pk }}/catalog/categories/">Перейти</a>
+                       <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:catalog_category' object.pk %}">Перейти</a>
                     </div>
                 </div>
             </div>
