@@ -1,4 +1,5 @@
 {% extends 'catalog/base.html' %}
+{% load media_path %}
 
 {% block content %}
 <h1 class="display-4">K-Shop</h1>
@@ -16,7 +17,7 @@
                     <div class="card-body">
                         {% for product in product_list %}
                             {% if product.category == object %}
-                                <img src="/media/{{ product.products_image }}" />
+                                <img src="{{product.products_image|mymedia }}" />
                             {% endif %}
                         {% endfor %}
                         <ul class="list-unstyled mt-3 mb-4 text-center m-3">

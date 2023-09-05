@@ -1,3 +1,5 @@
+{% load media_path %}
+
 <div class="container">
     <div class="row text-center">
         {% for product in product_list %}
@@ -7,7 +9,7 @@
                         <h4 class="my-0 font-weight-normal">{{ product.name|title }}</h4>
                     </div>
                     <div class="card-body">
-                        <img src="/media/{{ product.products_image }}" />
+                        <img src="{{product.products_image|mymedia }}"/>
                         <h6 class="card-title pricing-card-title">{{ product.price|floatformat:2 }} рублей</h6>
                         <ul class="list-unstyled mt-3 mb-4 text-center m-3">
                             <li>Описание товара: {{ product.description|slice:":100" }}</li>
