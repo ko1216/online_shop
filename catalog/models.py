@@ -22,8 +22,8 @@ class Product(models.Model):
     products_image = models.ImageField(upload_to='products_image', verbose_name='Product Image', **NULLABLE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Category')
     price = models.FloatField(max_length=15, verbose_name='Price')
-    created_at = models.DateTimeField(**NULLABLE, verbose_name='Created At')
-    last_update = models.DateTimeField(**NULLABLE, verbose_name='Last Update')
+    created_at = models.DateTimeField(**NULLABLE, auto_now_add=True, verbose_name='Created At')
+    last_update = models.DateTimeField(**NULLABLE, auto_now=True, verbose_name='Last Update')
 
     def __str__(self):
         return f'{self.name}: {self.description}'
