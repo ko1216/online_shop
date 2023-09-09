@@ -8,22 +8,22 @@
 
 <div class="container">
     <div class="row text-center">
-        {% for object in object_list %}
+        {% for category in categories %}
             <div class="col-4">
                 <div class="card mb-4 box-shadow">
                     <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+                        <h4 class="my-0 font-weight-normal">{{ category.name|title }}</h4>
                     </div>
                     <div class="card-body">
-                        {% for product in product_list %}
-                            {% if product.category == object %}
-                                <img src="{{product.products_image|mymedia }}" />
+                        {% for product in products %}
+                            {% if product.category == category %}
+                                <img src="{{ product.products_image|mymedia }}" />
                             {% endif %}
                         {% endfor %}
                         <ul class="list-unstyled mt-3 mb-4 text-center m-3">
-                            <li>{{ object.description }}</li>
+                            <li>{{ category.description }}</li>
                         </ul>
-                       <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:catalog_category' object.pk %}">Перейти</a>
+                       <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:catalog_category' category.pk %}">Перейти</a>
                     </div>
                 </div>
             </div>
