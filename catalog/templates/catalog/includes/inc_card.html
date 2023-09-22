@@ -9,13 +9,21 @@
                         <h4 class="my-0 font-weight-normal">{{ product.name|title }}</h4>
                     </div>
                     <div class="card-body">
-                        <img src="{{product.products_image|mymedia }}"/>
+                        <div class="wrapper exmpl">
+                            <img src="{{product.products_image|mymedia }}"/>
+                        </div>
                         <h6 class="card-title pricing-card-title">{{ product.price|floatformat:2 }} рублей</h6>
                         <ul class="list-unstyled mt-3 mb-4 text-center m-3">
                             <li>Описание товара: {{ product.description|slice:":100" }}</li>
                             <li>Категория товара: {{ product.category.name }}</li>
+                        {% for version in versions %}
+                            {% if version.product == product and version.is_active == True %}
+                            <li>Версия: {{ version.name }}</li>
+                            {% endif %}
+                        {% endfor %}
                         </ul>
                         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:product' product.pk %}">Перейти</a>
+                        <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:update_product' product.pk %}">Изменить</a>
                     </div>
                 </div>
             </div>

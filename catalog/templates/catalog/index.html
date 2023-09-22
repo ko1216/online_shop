@@ -17,7 +17,9 @@
                     <div class="card-body">
                         {% for product in products %}
                             {% if product.category == category %}
-                                <img src="{{ product.products_image|mymedia }}" />
+                                <div class="wrapper exmpl">
+                                    <img src="{{ product.products_image|mymedia }}"/>
+                                </div>
                             {% endif %}
                         {% endfor %}
                         <ul class="list-unstyled mt-3 mb-4 text-center m-3">
