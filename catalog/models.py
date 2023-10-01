@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 
@@ -24,6 +25,7 @@ class Product(models.Model):
     price = models.FloatField(max_length=15, verbose_name='Price')
     created_at = models.DateTimeField(**NULLABLE, auto_now_add=True, verbose_name='Created At')
     last_update = models.DateTimeField(**NULLABLE, auto_now=True, verbose_name='Last Update')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='User', **NULLABLE)
 
     def __str__(self):
         return f'{self.name}: {self.description}'
