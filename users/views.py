@@ -3,14 +3,15 @@ from django.contrib.auth.views import LoginView
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import CreateView
 from django.contrib import messages
 
+from catalog.models import Category
 from config import settings
 from users.forms import UserRegisterForm
 from users.models import User
@@ -23,7 +24,7 @@ class CustomLoginView(LoginView):
         if user.email_is_verified:
             return super().form_valid(form)
         else:
-            messages.error(self.request, 'Ваш email еще не подтвержден.')
+            messages.error(self.request, 'Ваш email еще не подтвержден, проверьте почту и перейдите по ссылке')
             return self.form_invalid(form)
 
 
@@ -33,21 +34,15 @@ class RegisterView(CreateView):
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')
 
-    # def form_valid(self, form):
-    #     new_user = form.save()
-    #     send_mail(
-    #         subject='Регистрация на сайте K-Shop',
-    #         message='Поздравляю Вас с регистрацией, перейдите по ссылке для подтверждения регистрации',
-    #         from_email=settings.EMAIL_HOST_USER,
-    #         recipient_list=[new_user.email]
-    #     )
-    #     return super().form_valid(form)
     def form_valid(self, form):
-        new_user = form.save()
+        new_user = form.save(commit=False)
+        new_user.is_active = False
         new_user.save()
 
         # Генерируем токен для верификации
         token = default_token_generator.make_token(new_user)
+        new_user.token = token
+        new_user.save()
         uid = urlsafe_base64_encode(force_bytes(new_user.pk))
         token_link = reverse('users:verify_email', kwargs={'uidb64': uid, 'token': token})
 
@@ -66,17 +61,17 @@ class RegisterView(CreateView):
 
 def verify_email(request, uidb64, token):
     try:
-        uid = force_str(urlsafe_base64_encode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         new_user = User.objects.get(pk=uid)
 
-    except (TypeError, ValueError, OverflowError):
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         new_user = None
 
-    if default_token_generator.check_token(new_user, token):
+    if new_user is not None and new_user.token == token:
         new_user.email_is_verified = True
         new_user.save()
         messages.success(request, 'Ваша почта успешно подтверждена.')
-        return HttpResponseRedirect(reverse('users:verify_email'))
+        return HttpResponseRedirect(reverse('users:verification_pass'))
     else:
         messages.error(request, 'Ссылка на верификацию недействительна')
         return HttpResponseRedirect(reverse('users:verification_failed'))
@@ -84,3 +79,12 @@ def verify_email(request, uidb64, token):
 
 def verification_failed(request):
     return render(request, 'users/verification_failed.html')
+
+
+def verification_pass(request):
+    return render(request, 'users/verification_pass.html')
+
+
+def create_new_password(request):
+    pass
+    # return redirect('users:login')
