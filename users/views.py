@@ -1,9 +1,10 @@
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_str
@@ -69,6 +70,7 @@ def verify_email(request, uidb64, token):
 
     if new_user is not None and new_user.token == token:
         new_user.email_is_verified = True
+        new_user.is_active = True
         new_user.save()
         messages.success(request, 'Ваша почта успешно подтверждена.')
         return HttpResponseRedirect(reverse('users:verification_pass'))
@@ -85,6 +87,19 @@ def verification_pass(request):
     return render(request, 'users/verification_pass.html')
 
 
-def create_new_password(request):
-    pass
-    # return redirect('users:login')
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'users/password_reset_email.html'
+    success_url = reverse_lazy('users:password_reset_done')
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_sent.html'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy('users:password_reset_complete')
+    template_name = 'users/password_reset_form.html'
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'users/password_reset_done.html'
