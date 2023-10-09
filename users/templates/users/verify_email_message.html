@@ -1,7 +1,10 @@
-Подтвердите вашу почту
+{% load i18n %}{% autoescape off %}
+{% blocktranslate %}Подтвердите вашу почту на сайте {{ site_name }}.{% endblocktranslate %}
 
-{{ user }}
+{% block reset_link %}
+http://{{ domain }}{{ token_link }}
+{% endblock %}
 
-Чтобы подтвердить свою почту, перейдите по следующей ссылке:
-{{ domain }}{{ token_link }}
-Если вы не регистрировались на нашем сайте, проигнорируйте это сообщение.
+{% translate "Если вы не регистрировались на нашем сайте, проигнорируйте это сообщение." %}
+
+{% endautoescape %}
