@@ -1,0 +1,46 @@
+{% extends 'catalog/base.html' %}
+{% load media_path %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-6">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ product.name|title }}</h4>
+                </div>
+                <div class="card-body">
+                    <img src="/media/{{ product.products_image }}"/>
+                    <h6 class="card-title pricing-card-title">{{ product.price|floatformat:2 }} рублей</h6>
+                    <ul class="list-unstyled mt-3 mb-4 text-center m-3">
+                        <li>Описание товара: {{ product.description|slice:":100" }}</li>
+                        <li>Товар добавлен: {{ product.created_at|date:"d.m.Y"}}</li>
+                    </ul>
+                    <a class="p-2 btn btn-outline-primary text-muted" href="#">Купить</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card mb-6 box-shadow">
+                <div class="card-header">
+                    <h5 class="my-0 font-weight-normal">Категория товара:</h5>
+                    <h3 class="my-0 font-weight-normal">{{ product.category.name }}</h3>
+                </div>
+                <div class="card-body">
+                    {% if product.category == category %}
+                    <div class="wrapper exmpl">
+                        <img src="{{ product.products_image|mymedia }}"/>
+                    </div>
+                    {% endif %}
+                    <ul class="list-unstyled mt-3 mb-4 text-center m-3">
+                        <li>{{ category.description }}</li>
+                    </ul>
+                    <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:catalog_category' category.pk %}">Перейти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

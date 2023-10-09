@@ -16,9 +16,9 @@
             <p class="card-text mb-auto">{{ blog.text }}</p>
             <p class="card-text mb-auto float-right">Кол-во просмотров: {{ blog.views_count }}</p>
         </div>
-            <div class="card-footer">
-                <a class="btn btn-link" href="{% url 'blog:blog_update' blog.pk %}">Изменить</a>
-                <a class="btn btn-outline-danger float-right" href="{% url 'blog:blog_delete' blog.pk %}">Удалить</a>
-            </div>
+        <div class="card-footer">
+            <a class="btn btn-link" href="{% url 'blog:blog_update' blog.pk %}">Изменить</a>
+            <a class="btn btn-outline-danger float-right" href="{% url 'blog:blog_delete' blog.pk %}">Удалить</a>
         </div>
     </div>
+</div>
