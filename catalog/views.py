@@ -1,11 +1,15 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.decorators.cache import cache_page
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 
 from catalog.forms import ProductForm, VersionForm
 from catalog.models import Category, Product, Version
+from catalog.services import get_cached_category, get_cached_categories
 
 
 class IndexListView(ListView):
@@ -19,6 +23,7 @@ class IndexListView(ListView):
         return context
 
 
+@cache_page(60)
 def contact(request):
     context = {
         'object_list': Category.objects.all(),
@@ -54,9 +59,9 @@ class CategoryListView(ListView):
         return context
 
 
-class ProductListView(ListView):
+class ProductDetailView(DetailView):
     model = Product
-    context_object_name = 'products'
+    context_object_name = 'product'
 
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
@@ -64,8 +69,9 @@ class ProductListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super(ProductListView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['category'] = get_cached_category(self.object)
+        context['categories'] = get_cached_categories(Category.objects.all())
         return context
 
 
@@ -76,7 +82,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context['categories'] = get_cached_categories(Category.objects.all())
         return context
 
     def form_valid(self, form):
@@ -93,7 +99,7 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
-        context['categories'] = Category.objects.all()
+        context['categories'] = get_cached_categories(Category.objects.all())
         context['formset'] = VersionFormset()
         if self.request.method == 'POST':
             context['formset'] = VersionFormset(self.request.POST, instance=self.object)

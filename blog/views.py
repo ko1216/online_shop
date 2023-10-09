@@ -4,6 +4,7 @@ from pytils.translit import slugify
 
 from blog.models import Blog
 from catalog.models import Category
+from catalog.services import get_cached_categories
 
 
 class BlogListView(ListView):
@@ -16,8 +17,8 @@ class BlogListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super(BlogListView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_cached_categories(Category.objects.all())
         return context
 
 
@@ -37,8 +38,8 @@ class BlogDetailView(DetailView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super(BlogDetailView, self).get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_cached_categories(Category.objects.all())
         return context
 
 
@@ -54,6 +55,11 @@ class BlogCreateView(CreateView):
             new_blog.save()
 
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_cached_categories(Category.objects.all())
+        return context
 
 
 class BlogUpdateView(UpdateView):
@@ -71,7 +77,17 @@ class BlogUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('blog:blog_detail', args=[self.kwargs.get('pk')])
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_cached_categories(Category.objects.all())
+        return context
+
 
 class BlogDeleteView(DeleteView):
     model = Blog
     success_url = reverse_lazy('blog:blog_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_cached_categories(Category.objects.all())
+        return context
