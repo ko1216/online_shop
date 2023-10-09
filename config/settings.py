@@ -16,7 +16,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 db_password: str = os.getenv('PSQL_PASSWORD')
+gmail_login: str = os.getenv('GMAIL_LOGIN')
 gmail_pass: str = os.getenv('GMAIL_PASSWORD')
+r_location: str = os.getenv('REDIS_LOCATION')
+secret_key: str = os.getenv('DJANGO_SK')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c*e3+e!6)e7=ugsxy+#t%_f5n#*u-2pw5gpbptyj0u*+w*b%&n'
+SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -144,7 +147,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'kkonstantinserg@gmail.com'
-EMAIL_HOST_PASSWORD = 'uxptpxpvvnyuyvlj'
+EMAIL_HOST_USER = gmail_login
+EMAIL_HOST_PASSWORD = gmail_pass
 
 X_FRAME_OPTIONS = 'ALLOWALL'
+
+CACHE_ENABLED = True
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": r_location,
+        }
+    }
