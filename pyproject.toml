@@ -15,6 +15,7 @@ shelter = "^2.4.0"
 pillow = "^10.0.0"
 ipython = "^8.15.0"
 pytils = "^0.4.1"
+redis = "^5.0.1"
 
 
 [build-system]
